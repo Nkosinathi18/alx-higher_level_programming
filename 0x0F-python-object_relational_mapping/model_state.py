@@ -1,30 +1,25 @@
 #!/usr/bin/python3
 """
-This script prints the State object id
-with the name passed as argument
-from the database `hbtn_0e_6_usa`.
+This script defines a State class and
+a Base class to work with MySQLAlchemy ORM.
 """
 
-from sys import argv
-from model_state import Base, State
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
 
-if __name__ == "__main__":
+Base = declarative_base()
+
+
+class State(Base):
+    """State class
+
+    Attributes:
+        __tablename__ (str): The table name of the class
+        id (int): The State id of the class
+        name (str): The State name of the class
+
     """
-    Access to the database and get a state
-    from the database.
-    """
+    __tablename__ = 'states'
 
-    db_uri = 'mysql+mysqldb://{}:{}@localhost:3306/{}'.format(
-        argv[1], argv[2], argv[3])
-    engine = create_engine(db_uri)
-    Session = sessionmaker(bind=engine)
-
-    session = Session()
-    instance = session.query(State).filter(State.name == argv[4]).first()
-
-    if instance is None:
-        print('Not found')
-    else:
-        print('{0}'.format(instance.id))
+    id = Column(Integer, primary_key=True)
+    name = Column(String(128), nullable=False)
